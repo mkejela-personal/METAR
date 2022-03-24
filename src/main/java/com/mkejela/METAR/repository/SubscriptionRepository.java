@@ -15,4 +15,8 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Int
 
     @Query(value = "select * from subscription", nativeQuery = true)
     List<Subscription> getAllSubscribedAirports();
+
+    Subscription getSubscriptionByIcaoCode(String icaoCode);
+
+    List<Subscription> getAllByIsActive(Boolean isActive);
 }

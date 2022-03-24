@@ -15,11 +15,6 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
     @Autowired
     SubscriptionRepository subscriptionRepository;
-    @Override
-    public Boolean isSubscribed(String icaoCode) {
-
-        return subscriptionRepository.findSubscriptionByIcaoCode(icaoCode)!=null;
-    }
 
     @Override
     public CommonResponse subscribeAirport(String icaoCode) {
@@ -31,7 +26,13 @@ public class SubscriptionServiceImpl implements SubscriptionService{
             return response;
         }
 
-        Subscription subscription = new Subscription();
+        Subscription subscription = subscriptionRepository.getSubscriptionByIcaoCode(icaoCode); //make sure the airport hasn't subscribed before
+        if(subscription!=null){
+            response.setMessage("Airport already subscribed");
+            return response;
+        }
+
+        subscription = new Subscription();
         subscription.setIcaoCode(icaoCode);
         subscription.setIsActive(Boolean.TRUE);
 
@@ -71,5 +72,41 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
 
         return response;
+    }
+
+    @Override
+    public String unsubscribeAirport(String airportCode, Boolean active) {
+
+        String message="";
+
+        Subscription airport=subscriptionRepository.getSubscriptionByIcaoCode(airportCode);
+
+      if (isSubscribed(airportCode)){
+          airport.setIsActive
+                  (active);
+          subscriptionRepository.save(airport);
+      }
+
+      else
+          message="airport is not subscribed or is already deactive";
+        return message;
+    }
+
+    @Override
+    public SubscriptionResponse getAllActiveSubscriptions(Boolean isActive) {
+
+        SubscriptionResponse response = new SubscriptionResponse();
+
+        List<Subscription> subscriptionList=subscriptionRepository.getAllByIsActive(isActive);
+
+        response.setSubscribedAirports(subscriptionList.stream().map(Subscription::getIcaoCode).collect(Collectors.toList()));
+
+        return response;
+    }
+
+    @Override
+    public Boolean isSubscribed(String icaoCode){
+        return subscriptionRepository.findSubscriptionByIcaoCode(icaoCode)!=null
+                && Boolean.TRUE.equals(subscriptionRepository.getSubscriptionByIcaoCode(icaoCode).getIsActive());
     }
 }

@@ -31,14 +31,17 @@ public class ParsedMetar extends Auditable {
 
 
     @Column(name = "visibility")
-    private Double visibility;
+    private String visibility;
 
     @Column(name = "precipitation_intensity")
     private String precipitationIntensity;
 
     @Column(name = "runware_visual_range")
-    private String runwayVisualRange;
+    private String                                                                              runwayVisualRange;
 
     @Column(name = "cloud_ceiling")
     private String cloudCeiling;
+
+    @Column(name = "temperature")
+    private String temperature;
 }
