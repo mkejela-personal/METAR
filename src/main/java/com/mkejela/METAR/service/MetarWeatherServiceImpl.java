@@ -7,6 +7,7 @@ import com.mkejela.METAR.repository.MetarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class MetarWeatherServiceImpl implements MetarWeatherService {
 
@@ -16,26 +17,37 @@ public class MetarWeatherServiceImpl implements MetarWeatherService {
     @Autowired
     private SubscriptionService subscriptionService;
 
+    public MetarWeatherServiceImpl(MetarRepository metarRepository, SubscriptionService subscriptionService) {
+        this.metarRepository = metarRepository;
+        this.subscriptionService = subscriptionService;
+    }
     @Override
     public WeatherServiceResponse addMetar(String data) throws MetarServiceException {
-
-        WeatherServiceResponse response = new WeatherServiceResponse();
+        
         Metar metar = new Metar();
 
         String icaoCode="";
 
         String[] splittedData=data.split("\\s+");
+        WeatherServiceResponse response = new WeatherServiceResponse();
 
+        if (data.startsWith("METAR")){
         if(splittedData.length!=1){
             icaoCode=splittedData[1];
+            }
         }
+        else
+            icaoCode = splittedData[0];
+
 
         if(!validateRequest(icaoCode)){
-           throw new MetarServiceException("Airport not subscribed", MetarServiceException.NOT_SUBSCRIBED);
+            response.setMessage("airport not subscribed");
+            response.setIcaoCode(icaoCode);
+            return response;
         }
 
         response.setMessage("success");
-        response.setIcao(icaoCode);
+        response.setIcaoCode(icaoCode);
         response.setData(data);
         metar.setData(data);
         metar.setAirportIcaoCode(icaoCode);
@@ -45,9 +57,18 @@ public class MetarWeatherServiceImpl implements MetarWeatherService {
         return response;
     }
 
+    @Override
+    public WeatherServiceResponse getMetarData() {
+        Metar metar=metarRepository.getLastInsertedMetar();
+        WeatherServiceResponse response = new WeatherServiceResponse();
+        response.setMessage("Success");
+        response.setData(metar.getData());
+        return response;
+    }
+
     private Boolean validateRequest(String icaoCode){
 
-        return icaoCode!= null && subscriptionService.isSubscribed(icaoCode);
+        return icaoCode!=null && subscriptionService.isSubscribed(icaoCode);
 
     }
 }

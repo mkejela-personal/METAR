@@ -7,14 +7,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class WeatherServiceResponse {
+public class WeatherServiceResponse extends CommonResponse {
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    String message;
-
-    @JsonIgnore
-    String icao;
-
-    @JsonIgnore
     String data;
 }

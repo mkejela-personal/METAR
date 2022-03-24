@@ -6,6 +6,5 @@ import com.mkejela.METAR.model.response.WeatherServiceResponse;
 public interface MetarWeatherService {
 
     WeatherServiceResponse addMetar(String data) throws MetarServiceException;
-    MetarWeatherInfoResponse getMetarData();
-
+    WeatherServiceResponse getMetarData();
 }
