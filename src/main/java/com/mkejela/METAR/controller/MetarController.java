@@ -40,7 +40,7 @@ public class MetarController {
         return metarWeatherService.getMetarData(airport);
     }
 
-    @GetMapping("{airport}/METAR")
+    @GetMapping("{airport}/METAR/specific")
     public ParsedMetarDataResponse getSpecificMetarData(@PathVariable("airport") String airport, SpecificMetarRequest request){
 
         return metarWeatherService.getSpecificMetarDataForAirport(request.getRequestedData(), airport);

@@ -5,7 +5,7 @@ errors. V1.2 Contains fixed code with some additional features
 
 #Request for Quering specific metar detail
 
-The request parameters for "{airport}/METAR") to get specific request are as follows:
+The request parameters for "{airport}/METAR/specific") to get specific request are as follows:
 
 - TEMPERATURE,
 - WIND_INFORMATION,
