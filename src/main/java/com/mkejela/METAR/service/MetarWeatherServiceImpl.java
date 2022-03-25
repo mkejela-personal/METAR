@@ -87,7 +87,9 @@ public class MetarWeatherServiceImpl implements MetarWeatherService {
 
         List<MetaDataEnum> metarDataEnum=new ArrayList<>(Arrays.asList(MetaDataEnum.TEMPERATURE, MetaDataEnum.CLOUD_CEILING,
                 MetaDataEnum.WIND_CHANGE, MetaDataEnum.RUNWAY_VISIBILITY, MetaDataEnum.WIND_INFORMATION, MetaDataEnum.PRECIPITATION));
-       if(parsedMetar!=null){
+
+
+       if(parsedMetar!=null && requiredData!=null){
            if(requiredData.contains(metarDataEnum.get(0).toString())){
                response.setTemperature(parsedMetar.getTemperature());
            }
